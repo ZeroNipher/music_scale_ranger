@@ -2,7 +2,7 @@
 
 A Python-based music theory exploration tool built with [music21](https://www.music21.org/).
 
-The project allows users to explore musical scales, find scales compatible with a collection of notes, inspect scale notes, and generate traditional diatonic harmonic fields.
+Music Scale Ranger allows users to explore musical scales, find scales compatible with a collection of notes, inspect scale notes, and generate traditional diatonic harmonic fields.
 
 It also includes a custom implementation of the Blues Scale.
 
@@ -25,14 +25,14 @@ Given the notes:
 C E G
 ```
 
-the analyzer searches the registered scales and possible tonics and returns compatible combinations.
+the analyzer searches the available scales and possible tonics for compatible combinations.
 
 The tool can also display a scale:
 
 ```text
 C Major
 
-C - D - E - F - G - A - B
+C - D - E - F - G - A - B - C
 ```
 
 and generate its harmonic field:
@@ -63,11 +63,11 @@ For C:
 C - Eb - F - Gb - G - Bb
 ```
 
-The custom scale is implemented as a subclass of `music21.scale.Scale`, allowing it to participate in the same scale-analysis workflow as the other supported scales.
+The custom scale is implemented as a subclass of `music21.scale.Scale`, allowing it to participate in the same scale-analysis workflow as the other scales.
 
 ## Scale Search
 
-The scale search works by comparing **pitch classes**.
+The scale search compares pitch classes when determining whether notes belong to a scale.
 
 For example:
 
@@ -77,7 +77,7 @@ F# == Gb
 A# == Bb
 ```
 
-The spelling of the note is therefore ignored when determining whether a pitch belongs to a scale.
+The spelling of the note is therefore ignored when determining pitch-class membership.
 
 ### Important limitation
 
@@ -85,7 +85,7 @@ The scale finder does **not** currently determine the most likely key or tonal c
 
 Instead, it answers:
 
-> "Which registered scales contain all of these notes?"
+> "Which scales contain all of these notes?"
 
 A set of notes can therefore produce multiple possible scales.
 
@@ -107,39 +107,35 @@ B D F
 
 For seventh chords, the seventh scale degree is added to each structure.
 
-The analyzer currently restricts traditional harmonic-field generation to **seven-note scales**.
+Traditional harmonic-field generation is currently restricted to **seven-note scales**.
 
 This prevents non-heptatonic scales, such as the six-note Blues Scale, from being interpreted as conventional seven-degree diatonic systems.
 
 ## Project Structure
 
 ```text
-music-scale-tool/
+music_scale_ranger/
 │
-├── music_scale_tool/
-│   ├── __init__.py
-│   ├── scales.py
-│   ├── analysis.py
-│   └── cli.py
-│
+├── music_scale_ranger.py
 ├── tests/
-│   ├── test_scales.py
-│   └── test_analysis.py
-│
-├── main.py
+│   ├── __init__.py
+│   └── test_music_scale_ranger.py
 ├── README.md
 ├── requirements.txt
 ├── .gitignore
-└── LICENSE
+├── LICENSE
+└── .git/
 ```
+
+The `.git/` directory is created automatically by Git and is not uploaded as part of the project files.
 
 ## Installation
 
 Clone the repository:
 
 ```bash
-git clone <repository-url>
-cd music-scale-tool
+git clone https://github.com/ZeroNipher/music_scale_ranger.git
+cd music_scale_ranger
 ```
 
 Create a virtual environment:
@@ -162,7 +158,7 @@ Activate it.
 source .venv/bin/activate
 ```
 
-Install the dependencies:
+Install the dependency:
 
 ```bash
 pip install -r requirements.txt
@@ -170,10 +166,10 @@ pip install -r requirements.txt
 
 ## Usage
 
-Run:
+Run the program:
 
 ```bash
-python main.py
+python music_scale_ranger.py
 ```
 
 The interactive menu provides:
@@ -184,24 +180,43 @@ The interactive menu provides:
 ========================================
 1. Descobrir escalas a partir de notas
 2. Ver notas de uma escala específica
-3. Ver campo harmônico
+3. Ver campo harmônico (tríades/tétrades)
 4. Sair
 ========================================
 ```
 
 ## Tests
 
-Run the test suite with:
+The project uses Python's built-in `unittest` framework.
+
+Run the test suite from the project root:
 
 ```bash
-pytest
+python -m unittest discover
 ```
+
+The current test suite covers:
+
+* Major scale note generation
+* Blues Scale note generation
+* Diatonic triad generation
+* Diatonic seventh-chord generation
+* Scale identification from a collection of notes
+
+## Requirements
+
+The project currently depends on:
+
+* Python
+* [music21](https://www.music21.org/)
+
+The required dependency is listed in `requirements.txt`.
 
 ## Technologies
 
 * Python
 * [music21](https://www.music21.org/)
-* pytest
+* `unittest`
 
 ## Future Improvements
 
